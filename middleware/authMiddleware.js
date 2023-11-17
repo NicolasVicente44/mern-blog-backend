@@ -11,7 +11,9 @@ export const authGuard = async (req, res, next) => {
       console.log("Received token:", token);
       console.log("Secret key:", process.env.JWT_SECRET); // Make sure this matches your secret key
       const { id } = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("User ID:", id); // Log the extracted user ID
       req.user = await User.findById(id).select("-password");
+      console.log("User:", req.user); // Log the retrieved user
       next();
     } catch (error) {
       console.error("Token verification error:", error);

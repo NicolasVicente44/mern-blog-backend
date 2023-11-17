@@ -1,9 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
+import { fileURLToPath } from "url";
+
 import errorResponseHandler, {
   invalidPathHandler,
 } from "./middleware/errorhandler.js";
+import path from "path";
 
 //routes
 import userRoutes from "./routes/userRoutes.js";
@@ -19,6 +22,15 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+
+// Get the current directory name using import.meta.url
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Use the current directory name to serve static files from the "uploads" folder
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
+//static assets
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.use(invalidPathHandler);
 app.use(errorResponseHandler);
