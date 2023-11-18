@@ -28,4 +28,14 @@ export const authGuard = async (req, res, next) => {
   }
 };
 
+export const adminGuard = (req, res, next) => {
+  if (req.user && req.user.admin) {
+    next();
+  } else {
+    let error = new Error("User is not authorized as an admin");
+    error.statusCode = 401;
+    next(error);
+  }
+};
+
 export default authGuard;

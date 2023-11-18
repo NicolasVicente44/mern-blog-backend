@@ -10,6 +10,8 @@ import path from "path";
 
 //routes
 import userRoutes from "./routes/userRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -22,6 +24,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
 
 // Get the current directory name using import.meta.url
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
