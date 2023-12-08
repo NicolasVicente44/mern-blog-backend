@@ -153,7 +153,7 @@ export const getAllPosts = async (req, res, next) => {
       where.title = { $regex: filter, $options: "i" };
     }
 
-    //limit blog results
+    //limit post response results
     let query = Post.find(where);
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.limit) || 10; //default value
@@ -161,9 +161,16 @@ export const getAllPosts = async (req, res, next) => {
     const total = await Post.find(where).countDocuments();
     const pages = Math.ceil(total / pageSize);
 
+    res.header({
+      "x-filter": filter,
+      "x-totalcount": JSON.stringify(total),
+      "x-currentpage": JSON.stringify(page),
+      "x-pagesize": JSON.stringify(pageSize),
+      "x-totalpagecount": JSON.stringify(pages),
+    });
+
     if (page > pages) {
-      const error = new Error("No page found");
-      return next(error);
+      return res.json([]);
     }
 
     const result = await query
@@ -176,14 +183,6 @@ export const getAllPosts = async (req, res, next) => {
         },
       ])
       .sort({ updatedAt: "desc" }); //sort results
-
-    res.header({
-      "x-filter": filter,
-      "x-totalcount": JSON.stringify(total),
-      "x-currentpage": JSON.stringify(page),
-      "x-pagesize": JSON.stringify(pageSize),
-      "x-totalpagecount": JSON.stringify(pages),
-    });
 
     return res.json(result);
   } catch (error) {

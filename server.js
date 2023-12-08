@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 import errorResponseHandler, {
   invalidPathHandler,
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
+app.use(cors());
 
 // Get the current directory name using import.meta.url
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
