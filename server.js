@@ -13,11 +13,13 @@ import path from "path";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
+import postCategoriesRoutes from "./routes/postCategoriesRoutes.js";
 
 dotenv.config();
 connectDB();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -27,7 +29,7 @@ app.get("/", (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
-app.use(cors());
+app.use("/api/post-categories", postCategoriesRoutes);
 
 // Get the current directory name using import.meta.url
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
