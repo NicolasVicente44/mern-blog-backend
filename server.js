@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import { fileURLToPath } from "url";
 import cors from "cors";
-
 import errorResponseHandler, {
   invalidPathHandler,
 } from "./middleware/errorhandler.js";
@@ -19,7 +18,16 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+
+// Configure CORS to allow requests from the frontend domain
+app.use(
+  cors({
+    origin: "https://mern-blog-i8vh.onrender.com",
+    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+  })
+);
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -35,9 +43,6 @@ app.use("/api/post-categories", postCategoriesRoutes);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Use the current directory name to serve static files from the "uploads" folder
-app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
-
-//static assets
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.use(invalidPathHandler);
